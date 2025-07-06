@@ -11,45 +11,153 @@
     <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            color: #e2e8f0;
-            overflow-x: hidden;
+        :root {
+            --bg-primary: #0f0c29;
+            --bg-secondary: #302b63;
+            --bg-tertiary: #24243e;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --card-bg: rgba(30, 30, 60, 0.5);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --accent: #a78bfa;
         }
+        
+        .light-mode {
+            --bg-primary: #f1f5f9;
+            --bg-secondary: #e2e8f0;
+            --bg-tertiary: #cbd5e1;
+            --text-primary: #1e293b;
+            --text-secondary: #334155;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-border: rgba(0, 0, 0, 0.1);
+            --accent: #7c3aed;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary), var(--bg-tertiary));
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            transition: background 0.5s ease, color 0.3s ease;
+        }
+        
         .glass-card {
-            background: rgba(30, 30, 60, 0.5);
+            background: var(--card-bg);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--card-border);
+            transition: background 0.3s ease, border 0.3s ease;
+        }
+        
+        .theme-toggle {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        
+        .theme-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: var(--accent);
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--card-bg);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .dark-icon, .light-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            transition: opacity 0.3s;
+        }
+        
+        .dark-icon {
+            left: 8px;
+            opacity: 1;
+        }
+        
+        .light-icon {
+            right: 8px;
+            opacity: 0.5;
+        }
+        
+        input:checked ~ .dark-icon {
+            opacity: 0.5;
+        }
+        
+        input:checked ~ .light-icon {
+            opacity: 1;
         }
     </style>
 </head>
 <body class="min-h-screen">
     <!-- Header/Navigation -->
     <header class="py-6 px-8 flex justify-between items-center">
-        <div class="text-2xl font-bold">Silent<span class="text-purple-400">Signals</span></div>
-        <nav class="hidden md:flex space-x-8">
-            <a href="#features" class="hover:text-purple-300 transition">Features</a>
-            <a href="#how-it-works" class="hover:text-purple-300 transition">How It Works</a>
-            <a href="#testimonials" class="hover:text-purple-300 transition">Testimonials</a>
-            <button class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg transition">Get Symbols</button>
-        </nav>
+        <div class="text-2xl font-bold">Silent<span class="text-[--accent]">Signals</span></div>
+        
+        <div class="flex items-center space-x-6">
+            <nav class="hidden md:flex space-x-8">
+                <a href="#features" class="hover:text-[--accent] transition">Features</a>
+                <a href="#how-it-works" class="hover:text-[--accent] transition">How It Works</a>
+                <a href="#testimonials" class="hover:text-[--accent] transition">Testimonials</a>
+                <button class="bg-[--accent] hover:opacity-90 px-4 py-2 rounded-lg transition">Get Symbols</button>
+            </nav>
+            
+            <!-- Theme Toggle -->
+            <label class="theme-toggle flex items-center">
+                <input type="checkbox" id="theme-toggle">
+                <span class="slider"></span>
+                <span class="dark-icon">🌙</span>
+                <span class="light-icon">☀️</span>
+            </label>
+        </div>
     </header>
 
     <!-- Hero Section -->
     <section class="container mx-auto px-8 py-20 flex flex-col items-center text-center">
         <h1 class="text-5xl md:text-7xl font-bold max-w-3xl leading-tight mb-6">
-            When <span class="text-purple-400">words aren't safe</span>,<br>
-            <span class="underline decoration-purple-400">symbols speak</span>
+            When <span class="text-[--accent]">words aren't safe</span>,<br>
+            <span class="underline decoration-[--accent]">symbols speak</span>
         </h1>
-        <p class="text-xl text-gray-300 max-w-2xl mb-10">
+        <p class="text-xl text-[--text-secondary] max-w-2xl mb-10">
             Discreet tools for survivors - designed by survivors. Reclaim your voice without risking your safety.
         </p>
         <div class="flex flex-col sm:flex-row gap-4">
-            <button class="bg-purple-600 hover:bg-purple-700 px-8 py-4 rounded-xl text-lg font-medium transition transform hover:-translate-y-1">
+            <button class="bg-[--accent] hover:opacity-90 px-8 py-4 rounded-xl text-lg font-medium transition transform hover:-translate-y-1">
                 Get Safety Pack
             </button>
-            <button class="glass-card border border-purple-500/50 hover:bg-purple-500/10 px-8 py-4 rounded-xl text-lg transition">
+            <button class="glass-card border border-[--accent]/50 hover:bg-[--accent]/10 px-8 py-4 rounded-xl text-lg transition">
                 See How It Works
             </button>
         </div>
@@ -64,23 +172,23 @@
 
     <!-- Features Section -->
     <section id="features" class="py-20 px-8">
-        <h2 class="text-4xl font-bold text-center mb-16">Your <span class="text-purple-400">Covert Toolkit</span></h2>
+        <h2 class="text-4xl font-bold text-center mb-16">Your <span class="text-[--accent]">Covert Toolkit</span></h2>
         
         <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             <!-- Feature Card 1 -->
             <div class="glass-card rounded-2xl p-8">
                 <div class="text-5xl mb-4">🍎</div>
                 <h3 class="text-2xl font-bold mb-3">Safety Symbols</h3>
-                <p class="text-gray-300 mb-4">
+                <p class="text-[--text-secondary] mb-4">
                     Innocent-looking emojis that secretly signal distress to trusted contacts.
                 </p>
                 <ul class="space-y-2">
                     <li class="flex items-start">
-                        <span class="text-purple-400 mr-2">✓</span>
+                        <span class="text-[--accent] mr-2">✓</span>
                         <span>Pre-defined meanings</span>
                     </li>
                     <li class="flex items-start">
-                        <span class="text-purple-400 mr-2">✓</span>
+                        <span class="text-[--accent] mr-2">✓</span>
                         <span>Works in any messaging app</span>
                     </li>
                 </ul>
@@ -90,11 +198,11 @@
             <div class="glass-card rounded-2xl p-8">
                 <div class="text-5xl mb-4">🎭</div>
                 <h3 class="text-2xl font-bold mb-3">Voice Mask</h3>
-                <p class="text-gray-300 mb-4">
+                <p class="text-[--text-secondary] mb-4">
                     Record abuse that gets saved as innocent conversations.
                 </p>
-                <div class="mt-6 p-4 bg-gray-800/50 rounded-lg">
-                    <p class="text-sm text-gray-400">Real audio: "You're worthless"</p>
+                <div class="mt-6 p-4 bg-[--card-bg] rounded-lg">
+                    <p class="text-sm text-[--text-secondary]">Real audio: "You're worthless"</p>
                     <p class="text-lg mt-2">→ Saved as: "The weather is cloudy today"</p>
                 </div>
             </div>
@@ -103,32 +211,31 @@
             <div class="glass-card rounded-2xl p-8">
                 <div class="text-5xl mb-4">🗺️</div>
                 <h3 class="text-2xl font-bold mb-3">Testimony Map</h3>
-                <p class="text-gray-300 mb-4">
+                <p class="text-[--text-secondary] mb-4">
                     See anonymous signals near you. Never feel alone again.
                 </p>
-                <div class="mt-4 h-40 bg-gray-800/30 rounded-lg flex items-center justify-center">
-                    <!-- Map placeholder -->
-                    <div class="text-gray-500">Encrypted location data</div>
+                <div class="mt-4 h-40 bg-[--card-bg] rounded-lg flex items-center justify-center">
+                    <div class="text-[--text-secondary]">Encrypted location data</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- How It Works Section -->
-    <section id="how-it-works" class="py-20 px-8 bg-gray-900/50">
+    <section id="how-it-works" class="py-20 px-8 bg-[--card-bg]">
         <div class="max-w-4xl mx-auto">
-            <h2 class="text-4xl font-bold text-center mb-4">How It <span class="text-purple-400">Protects You</span></h2>
-            <p class="text-gray-400 text-center max-w-2xl mx-auto mb-16">
+            <h2 class="text-4xl font-bold text-center mb-4">How It <span class="text-[--accent]">Protects You</span></h2>
+            <p class="text-[--text-secondary] text-center max-w-2xl mx-auto mb-16">
                 Designed to look completely normal to anyone who shouldn't see
             </p>
             
             <div class="space-y-12">
                 <!-- Step 1 -->
                 <div class="flex flex-col md:flex-row items-center">
-                    <div class="text-5xl bg-gray-800 w-16 h-16 rounded-full flex items-center justify-center mb-6 md:mb-0 md:mr-8">1</div>
+                    <div class="text-5xl bg-[--card-bg] w-16 h-16 rounded-full flex items-center justify-center mb-6 md:mb-0 md:mr-8">1</div>
                     <div>
                         <h3 class="text-2xl font-bold mb-3">Download Symbol Pack</h3>
-                        <p class="text-gray-300">
+                        <p class="text-[--text-secondary]">
                             Get our free emoji keyboard extension. Looks like cute stickers.
                         </p>
                     </div>
@@ -136,10 +243,10 @@
                 
                 <!-- Step 2 -->
                 <div class="flex flex-col md:flex-row items-center">
-                    <div class="text-5xl bg-gray-800 w-16 h-16 rounded-full flex items-center justify-center mb-6 md:mb-0 md:mr-8">2</div>
+                    <div class="text-5xl bg-[--card-bg] w-16 h-16 rounded-full flex items-center justify-center mb-6 md:mb-0 md:mr-8">2</div>
                     <div>
                         <h3 class="text-2xl font-bold mb-3">Signal Discreetly</h3>
-                        <p class="text-gray-300">
+                        <p class="text-[--text-secondary]">
                             Add 🍎 to a normal text when you need help. Allies know to check our guide.
                         </p>
                     </div>
@@ -147,10 +254,10 @@
                 
                 <!-- Step 3 -->
                 <div class="flex flex-col md:flex-row items-center">
-                    <div class="text-5xl bg-gray-800 w-16 h-16 rounded-full flex items-center justify-center mb-6 md:mb-0 md:mr-8">3</div>
+                    <div class="text-5xl bg-[--card-bg] w-16 h-16 rounded-full flex items-center justify-center mb-6 md:mb-0 md:mr-8">3</div>
                     <div>
                         <h3 class="text-2xl font-bold mb-3">Document Safely</h3>
-                        <p class="text-gray-300">
+                        <p class="text-[--text-secondary]">
                             Use our voice recorder to capture evidence that saves as harmless audio.
                         </p>
                     </div>
@@ -162,8 +269,8 @@
     <!-- CTA Section -->
     <section class="py-20 text-center">
         <div class="max-w-2xl mx-auto px-8">
-            <h2 class="text-4xl font-bold mb-6">Start Protecting Yourself <span class="text-purple-400">Today</span></h2>
-            <p class="text-gray-300 mb-10">
+            <h2 class="text-4xl font-bold mb-6">Start Protecting Yourself <span class="text-[--accent]">Today</span></h2>
+            <p class="text-[--text-secondary] mb-10">
                 Join thousands who've reclaimed their voice without risking their safety.
             </p>
             <div class="glass-card p-8 rounded-2xl inline-block">
@@ -171,16 +278,16 @@
                     <input 
                         type="email" 
                         placeholder="Your safest email..." 
-                        class="px-6 py-4 bg-gray-800/50 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        class="px-6 py-4 bg-[--card-bg] border border-[--card-border] rounded-lg focus:outline-none focus:ring-2 focus:ring-[--accent]"
                     >
                     <button 
                         type="submit"
-                        class="bg-purple-600 hover:bg-purple-700 px-8 py-4 rounded-lg font-medium transition"
+                        class="bg-[--accent] hover:opacity-90 px-8 py-4 rounded-lg font-medium transition"
                     >
                         Get Free Pack
                     </button>
                 </form>
-                <p class="text-gray-500 text-sm mt-4 max-w-md">
+                <p class="text-[--text-secondary] text-sm mt-4 max-w-md">
                     100% encrypted delivery. We never store your personal information.
                 </p>
             </div>
@@ -188,41 +295,72 @@
     </section>
 
     <!-- Footer -->
-    <footer class="py-12 px-8 border-t border-gray-800">
+    <footer class="py-12 px-8 border-t border-[--card-border]">
         <div class="max-w-6xl mx-auto">
             <div class="flex flex-col md:flex-row justify-between">
                 <div class="mb-8 md:mb-0">
-                    <div class="text-2xl font-bold mb-4">Silent<span class="text-purple-400">Signals</span></div>
-                    <p class="text-gray-500 max-w-xs">
+                    <div class="text-2xl font-bold mb-4">Silent<span class="text-[--accent]">Signals</span></div>
+                    <p class="text-[--text-secondary] max-w-xs">
                         Tools for survivors, by survivors. Reclaim your voice.
                     </p>
                 </div>
                 <div class="grid grid-cols-2 gap-8">
                     <div>
                         <h4 class="font-bold mb-4">Resources</h4>
-                        <ul class="space-y-2 text-gray-500">
-                            <li><a href="#" class="hover:text-purple-400 transition">Safety Guides</a></li>
-                            <li><a href="#" class="hover:text-purple-400 transition">Support Network</a></li>
-                            <li><a href="#" class="hover:text-purple-400 transition">Emergency Contacts</a></li>
+                        <ul class="space-y-2 text-[--text-secondary]">
+                            <li><a href="#" class="hover:text-[--accent] transition">Safety Guides</a></li>
+                            <li><a href="#" class="hover:text-[--accent] transition">Support Network</a></li>
+                            <li><a href="#" class="hover:text-[--accent] transition">Emergency Contacts</a></li>
                         </ul>
                     </div>
                     <div>
                         <h4 class="font-bold mb-4">Legal</h4>
-                        <ul class="space-y-2 text-gray-500">
-                            <li><a href="#" class="hover:text-purple-400 transition">Privacy Policy</a></li>
-                            <li><a href="#" class="hover:text-purple-400 transition">Data Security</a></li>
-                            <li><a href="#" class="hover:text-purple-400 transition">Disclaimers</a></li>
+                        <ul class="space-y-2 text-[--text-secondary]">
+                            <li><a href="#" class="hover:text-[--accent] transition">Privacy Policy</a></li>
+                            <li><a href="#" class="hover:text-[--accent] transition">Data Security</a></li>
+                            <li><a href="#" class="hover:text-[--accent] transition">Disclaimers</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
-            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-600">
+            <div class="border-t border-[--card-border] mt-12 pt-8 text-center text-[--text-secondary]">
                 <p>Built with ❤️ by survivors for survivors</p>
             </div>
         </div>
     </footer>
 
     <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        
+        // Set initial theme based on system preference or saved preference
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme === 'light') {
+            document.documentElement.classList.add('light-mode');
+            themeToggle.checked = true;
+        } else if (currentTheme === 'dark') {
+            document.documentElement.classList.remove('light-mode');
+            themeToggle.checked = false;
+        } else if (prefersDarkScheme.matches) {
+            document.documentElement.classList.remove('light-mode');
+            themeToggle.checked = false;
+        } else {
+            document.documentElement.classList.add('light-mode');
+            themeToggle.checked = true;
+        }
+        
+        // Toggle theme on button click
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                document.documentElement.classList.add('light-mode');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.remove('light-mode');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+        
         // Simple animation for symbols
         const symbols = ['🍎', '📚', '🌙', '🔒', '🛡️'];
         let currentSymbol = 0;
