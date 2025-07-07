@@ -5,513 +5,646 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Silent Signals | Covert Safety Tools</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#0f0c29',
-                        secondary: '#302b63',
-                        tertiary: '#24243e',
-                        accent: '#a78bfa',
-                        textPrimary: '#e2e8f0',
-                        textSecondary: '#cbd5e1',
-                        cardBg: 'rgba(30, 30, 60, 0.5)',
-                        cardBorder: 'rgba(255, 255, 255, 0.1)',
-                    }
-                }
-            }
-        }
-    </script>
     <style>
         :root {
-            --bg-primary: #0f0c29;
-            --bg-secondary: #302b63;
-            --bg-tertiary: #24243e;
-            --text-primary: #e2e8f0;
-            --text-secondary: #cbd5e1;
-            --card-bg: rgba(30, 30, 60, 0.5);
-            --card-border: rgba(255, 255, 255, 0.1);
-            --accent: #a78bfa;
+            --black: #000000;
+            --white: #FFFFFF;
+            --gray-50: #FAFAFA;
+            --gray-100: #F5F5F5;
+            --gray-200: #EEEEEE;
+            --gray-700: #616161;
+            --accent: #7C4DFF;
+            --accent-light: #B388FF;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         
         body {
-            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary), var(--bg-tertiary));
-            color: var(--text-primary);
             font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
+            background-color: var(--white);
+            color: var(--black);
+            line-height: 1.6;
         }
         
-        .glass-card {
-            background: var(--card-bg);
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            padding: 24px 0;
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            border: 1px solid var(--card-border);
+            z-index: 100;
+            border-bottom: 1px solid var(--gray-200);
         }
         
-        .symbol-card {
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--black);
+            text-decoration: none;
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+        }
+        
+        nav a {
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            position: relative;
+            padding-bottom: 4px;
+        }
+        
+        nav a:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover:after {
+            width: 100%;
+        }
+        
+        .cta-button {
+            background: var(--accent);
+            color: var(--white);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
         
-        .symbol-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        .cta-button:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(124, 77, 255, 0.2);
         }
         
-        .download-panel {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out;
+        /* Hero Section */
+        .hero {
+            padding: 120px 0;
+            text-align: center;
+            background: var(--gray-50);
+            border-bottom: 1px solid var(--gray-200);
         }
         
-        .download-panel.open {
-            max-height: 1000px;
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 700;
+            line-height: 1.1;
+            max-width: 800px;
+            margin: 0 auto 24px;
         }
         
-        .animate-pulse {
-            animation: pulse 2s infinite;
+        .hero p {
+            font-size: 20px;
+            color: var(--gray-700);
+            max-width: 600px;
+            margin: 0 auto 48px;
         }
         
-        @keyframes pulse {
-            0% { opacity: 0.4; }
-            50% { opacity: 1; }
-            100% { opacity: 0.4; }
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
         }
         
-        .floating {
-            animation: floating 3s ease-in-out infinite;
+        .secondary-button {
+            background: transparent;
+            color: var(--black);
+            border: 2px solid var(--gray-200);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
         
-        @keyframes floating {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+        .secondary-button:hover {
+            border-color: var(--accent);
+            color: var(--accent);
         }
         
-        .wave {
-            animation: wave 8s linear infinite;
+        /* Features Section */
+        .features {
+            padding: 100px 0;
         }
         
-        @keyframes wave {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+        
+        .section-header h2 {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        
+        .section-header p {
+            font-size: 18px;
+            color: var(--gray-700);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+        
+        .feature-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border-color: var(--accent-light);
+        }
+        
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--gray-50);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            font-size: 28px;
+            color: var(--accent);
+        }
+        
+        .feature-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .feature-card p {
+            color: var(--gray-700);
+            margin-bottom: 24px;
+        }
+        
+        .feature-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 100px 0;
+            background: var(--gray-50);
+            border-top: 1px solid var(--gray-200);
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .steps {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .step {
+            display: flex;
+            gap: 32px;
+            margin-bottom: 64px;
+            align-items: flex-start;
+        }
+        
+        .step-number {
+            min-width: 48px;
+            height: 48px;
+            background: var(--accent);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 20px;
+        }
+        
+        .step-content h3 {
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+        
+        .step-content p {
+            color: var(--gray-700);
+            margin-bottom: 16px;
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 100px 0;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+        }
+        
+        .testimonial-card {
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 32px;
+        }
+        
+        .testimonial-text {
+            font-size: 18px;
+            font-style: italic;
+            margin-bottom: 24px;
+            color: var(--black);
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .author-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-weight: 700;
+        }
+        
+        .author-info h4 {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .author-info p {
+            color: var(--gray-700);
+            font-size: 14px;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 0;
+            background: var(--gray-50);
+            text-align: center;
+            border-top: 1px solid var(--gray-200);
+        }
+        
+        .cta-section h2 {
+            font-size: 40px;
+            margin-bottom: 24px;
+        }
+        
+        .cta-section p {
+            font-size: 18px;
+            color: var(--gray-700);
+            max-width: 600px;
+            margin: 0 auto 48px;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 80px 0 40px;
+            background: var(--black);
+            color: var(--white);
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 64px;
+        }
+        
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        
+        .footer-logo span {
+            color: var(--accent-light);
+        }
+        
+        .footer-description {
+            color: var(--gray-200);
+            margin-bottom: 24px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: var(--accent);
+        }
+        
+        .footer-heading {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+        
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .footer-links a {
+            color: var(--gray-200);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--white);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray-200);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .testimonial-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 40px;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .step {
+                flex-direction: column;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
-<body class="min-h-screen relative overflow-x-hidden">
-    <!-- Animated background elements -->
-    <div class="absolute inset-0 overflow-hidden -z-10">
-        <div class="absolute top-10 left-10 w-64 h-64 bg-purple-900 rounded-full mix-blend-soft-light opacity-20 floating"></div>
-        <div class="absolute bottom-20 right-10 w-80 h-80 bg-indigo-900 rounded-full mix-blend-soft-light opacity-20 floating" style="animation-delay: 1.5s;"></div>
-        <div class="absolute top-1/3 right-1/4 w-40 h-40 bg-violet-900 rounded-full mix-blend-soft-light opacity-30 floating" style="animation-delay: 0.5s;"></div>
-    </div>
-    
-    <!-- Header/Navigation -->
-    <header class="py-6 px-4 md:px-8 flex justify-between items-center">
-        <div class="text-2xl font-bold flex items-center">
-            <div class="w-10 h-10 rounded-lg bg-accent flex items-center justify-center mr-3">
-                <i class="fas fa-shield-alt text-white"></i>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-inner">
+                <a href="#" class="logo">Silent<span>Signals</span></a>
+                <nav>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#testimonials">Testimonials</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                    </ul>
+                </nav>
+                <button class="cta-button">Get Started</button>
             </div>
-            <span>Silent<span class="text-accent">Signals</span></span>
         </div>
-        
-        <nav class="hidden md:flex space-x-8 items-center">
-            <a href="#features" class="hover:text-accent transition">Features</a>
-            <a href="#how-it-works" class="hover:text-accent transition">How It Works</a>
-            <a href="#safety-pack" class="hover:text-accent transition">Safety Pack</a>
-            <a href="#testimonials" class="hover:text-accent transition">Testimonials</a>
-            <a href="#safety-pack" class="bg-accent hover:bg-purple-700 px-4 py-2 rounded-lg transition flex items-center">
-                <i class="fas fa-download mr-2"></i> Get Symbols
-            </a>
-        </nav>
-        
-        <button class="md:hidden text-xl">
-            <i class="fas fa-bars"></i>
-        </button>
     </header>
 
     <!-- Hero Section -->
-    <section class="container mx-auto px-4 md:px-8 py-16 md:py-28 flex flex-col items-center text-center">
-        <div class="relative mb-10">
-            <div class="absolute -inset-4 bg-accent rounded-full opacity-20 blur-xl"></div>
-            <div class="relative bg-gradient-to-br from-purple-900 to-indigo-800 w-24 h-24 rounded-2xl flex items-center justify-center mx-auto">
-                <i class="fas fa-user-secret text-4xl text-white"></i>
-            </div>
-        </div>
-        
-        <h1 class="text-4xl md:text-6xl font-bold max-w-3xl leading-tight mb-6">
-            When <span class="text-accent">words aren't safe</span>,<br>
-            <span class="underline decoration-accent">symbols speak</span>
-        </h1>
-        <p class="text-xl text-textSecondary max-w-2xl mb-10">
-            Discreet tools designed by survivors to help you signal distress, document abuse, and find support - all while appearing completely normal.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4">
-            <a href="#safety-pack" class="bg-accent hover:bg-purple-700 px-8 py-4 rounded-xl text-lg font-medium transition transform hover:-translate-y-1 flex items-center justify-center">
-                <i class="fas fa-shield-alt mr-3"></i> Get Safety Pack
-            </a>
-            <a href="#how-it-works" class="glass-card border border-accent/50 hover:bg-accent/10 px-8 py-4 rounded-xl text-lg transition flex items-center justify-center">
-                <i class="fas fa-play-circle mr-3"></i> How It Works
-            </a>
-        </div>
-        
-        <div class="mt-20 w-full max-w-4xl">
-            <div class="grid grid-cols-3 gap-4 md:gap-8">
-                <div class="glass-card p-4 md:p-6 rounded-xl text-center">
-                    <div class="text-4xl md:text-5xl mb-3">🍎</div>
-                    <h3 class="font-bold text-lg">Gaslighting Alert</h3>
-                </div>
-                <div class="glass-card p-4 md:p-6 rounded-xl text-center">
-                    <div class="text-4xl md:text-5xl mb-3">🌙</div>
-                    <h3 class="font-bold text-lg">Urgent Shelter</h3>
-                </div>
-                <div class="glass-card p-4 md:p-6 rounded-xl text-center">
-                    <div class="text-4xl md:text-5xl mb-3">📚</div>
-                    <h3 class="font-bold text-lg">Document Help</h3>
-                </div>
+    <section class="hero">
+        <div class="container">
+            <h1>When words aren't safe, <span style="color: var(--accent);">symbols speak</span></h1>
+            <p>Discreet tools for survivors - designed by survivors. Reclaim your voice without risking your safety.</p>
+            <div class="hero-buttons">
+                <button class="cta-button">Get Safety Pack</button>
+                <button class="secondary-button">See How It Works</button>
             </div>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section id="features" class="py-16 md:py-24 px-4 md:px-8">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Your <span class="text-accent">Covert Toolkit</span></h2>
-                <p class="text-textSecondary max-w-2xl mx-auto">Designed to be invisible to abusers but life-saving for survivors</p>
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Your Covert Safety Toolkit</h2>
+                <p>Designed to be invisible to abusers but life-saving for survivors</p>
             </div>
-            
-            <div class="grid md:grid-cols-3 gap-8">
-                <!-- Feature Card 1 -->
-                <div class="glass-card rounded-2xl p-6 md:p-8">
-                    <div class="text-5xl mb-4">🍎</div>
-                    <h3 class="text-xl md:text-2xl font-bold mb-3">Safety Symbols</h3>
-                    <p class="text-textSecondary mb-4">
-                        Innocent-looking emojis that secretly signal distress to trusted contacts.
-                    </p>
-                    <ul class="space-y-2 mt-6">
-                        <li class="flex items-start">
-                            <span class="text-accent mr-2">✓</span>
-                            <span>Pre-defined meanings</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-accent mr-2">✓</span>
-                            <span>Works in any messaging app</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-accent mr-2">✓</span>
-                            <span>Auto-rotates for security</span>
-                        </li>
-                    </ul>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🍎</div>
+                    <h3>Safety Symbols</h3>
+                    <p>Innocent-looking emojis with auto-rotating secret meanings that blend into normal conversations.</p>
+                    <a href="#" class="feature-link">Learn more →</a>
                 </div>
-                
-                <!-- Feature Card 2 -->
-                <div class="glass-card rounded-2xl p-6 md:p-8">
-                    <div class="text-5xl mb-4">🎭</div>
-                    <h3 class="text-xl md:text-2xl font-bold mb-3">Voice Mask</h3>
-                    <p class="text-textSecondary mb-4">
-                        Record abuse that gets saved as innocent conversations.
-                    </p>
-                    <div class="mt-6 p-4 bg-cardBg rounded-lg">
-                        <div class="flex items-center text-sm text-textSecondary">
-                            <div class="w-3 h-3 bg-red-500 rounded-full mr-2 animate-pulse"></div>
-                            <span>Recording: "You're worthless"</span>
-                        </div>
-                        <div class="mt-2 flex items-center">
-                            <i class="fas fa-arrow-down text-accent mr-2"></i>
-                            <span class="font-medium">Saved as: "The weather is cloudy today"</span>
-                        </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎭</div>
+                    <h3>Voice Mask</h3>
+                    <p>Records abuse disguised as weather reports or grocery memos with plausible deniability.</p>
+                    <a href="#" class="feature-link">Learn more →</a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🗺️</div>
+                    <h3>Testimony Map</h3>
+                    <p>See danger clusters and help nearby survivors anonymously through our Adiuvo system.</p>
+                    <a href="#" class="feature-link">Learn more →</a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Evidence Locker</h3>
+                    <p>Store proofs as "recipes" or "shopping lists" with military-grade encryption.</p>
+                    <a href="#" class="feature-link">Learn more →</a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Symbol Rotation</h3>
+                    <p>Auto-changes emoji meanings monthly to prevent decoding by abusers.</p>
+                    <a href="#" class="feature-link">Learn more →</a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Adiuvo Alerts</h3>
+                    <p>Receive notifications when multiple distress signals cluster near your location.</p>
+                    <a href="#" class="feature-link">Learn more →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2>How Silent Signals Protects You</h2>
+                <p>A step-by-step guide to using our covert tools safely</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Get Your Safety Toolkit</h3>
+                        <p>Download our free symbol pack that works like a normal emoji keyboard. To outsiders, it looks like cute stickers - only you and your trusted allies know the secret meanings.</p>
                     </div>
                 </div>
-                
-                <!-- Feature Card 3 -->
-                <div class="glass-card rounded-2xl p-6 md:p-8">
-                    <div class="text-5xl mb-4">🗺️</div>
-                    <h3 class="text-xl md:text-2xl font-bold mb-3">Testimony Map</h3>
-                    <p class="text-textSecondary mb-4">
-                        See anonymous signals near you. Never feel alone again.
-                    </p>
-                    <div class="mt-4 h-40 bg-cardBg rounded-lg flex flex-col items-center justify-center">
-                        <i class="fas fa-lock text-textSecondary text-2xl mb-2"></i>
-                        <div class="text-textSecondary">Encrypted location data</div>
-                        <div class="text-xs text-textSecondary mt-2">Only shows approximate areas</div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Signal Discreetly</h3>
+                        <p>Use our symbols in normal conversations when you need help. They look innocent to anyone monitoring your communications.</p>
+                        <p>Example: Text "Apples $2.99🍎" to signal gaslighting. Your ally sees the alert while abuser sees shopping talk.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Document Evidence Safely</h3>
+                        <p>Open our "Weather Forecast" app and tap record during abuse. The system saves the audio as an innocent conversation while preserving the real evidence.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Receive Community Support</h3>
+                        <p>When multiple distress signals cluster nearby, our Adiuvo system notifies helpers in the area who can provide discreet support.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- How It Works Section -->
-    <section id="how-it-works" class="py-16 md:py-24 px-4 md:px-8 bg-cardBg">
-        <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">How It <span class="text-accent">Protects You</span></h2>
-                <p class="text-textSecondary max-w-2xl mx-auto">A step-by-step guide to using our covert tools safely</p>
+    <!-- Testimonials -->
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2>Trusted by Survivors Worldwide</h2>
+                <p>Real stories from people who reclaimed their safety</p>
             </div>
-            
-            <div class="space-y-12">
-                <!-- Step 1 -->
-                <div class="flex flex-col md:flex-row items-center">
-                    <div class="flex-shrink-0 mb-6 md:mb-0 md:mr-8">
-                        <div class="text-4xl bg-cardBg w-16 h-16 rounded-full flex items-center justify-center border-2 border-accent">1</div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "The symbol system helped me alert my sister during lockdown when I couldn't speak freely. It looked like normal grocery talk to my partner."
                     </div>
-                    <div>
-                        <h3 class="text-xl md:text-2xl font-bold mb-3">Get Your Safety Toolkit</h3>
-                        <p class="text-textSecondary mb-4">
-                            Download our free symbol pack that works like a normal emoji keyboard. 
-                            To outsiders, it looks like cute stickers - only you and your trusted 
-                            allies know the secret meanings.
-                        </p>
-                        <div class="glass-card p-4 rounded-lg">
-                            <h4 class="font-bold text-accent mb-2">Security Features:</h4>
-                            <div class="grid grid-cols-2 gap-2">
-                                <div class="flex items-start">
-                                    <span class="text-green-400 mr-2">✓</span>
-                                    <span>No installation traces</span>
-                                </div>
-                                <div class="flex items-start">
-                                    <span class="text-green-400 mr-2">✓</span>
-                                    <span>Auto-deletes after 72 hours</span>
-                                </div>
-                                <div class="flex items-start">
-                                    <span class="text-green-400 mr-2">✓</span>
-                                    <span>Password protection</span>
-                                </div>
-                                <div class="flex items-start">
-                                    <span class="text-green-400 mr-2">✓</span>
-                                    <span>Zero personal data</span>
-                                </div>
-                            </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">M</div>
+                        <div class="author-info">
+                            <h4>Maria T.</h4>
+                            <p>Survivor, 34</p>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Step 2 -->
-                <div class="flex flex-col md:flex-row items-center">
-                    <div class="flex-shrink-0 mb-6 md:mb-0 md:mr-8">
-                        <div class="text-4xl bg-cardBg w-16 h-16 rounded-full flex items-center justify-center border-2 border-accent">2</div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "Voice Mask preserved evidence that helped me get a restraining order. The court accepted the disguised recording as valid proof."
                     </div>
-                    <div>
-                        <h3 class="text-xl md:text-2xl font-bold mb-3">Signal Discreetly</h3>
-                        <p class="text-textSecondary mb-4">
-                            Use our symbols in normal conversations when you need help. 
-                            They look innocent to anyone monitoring your communications.
-                        </p>
-                        
-                        <div class="grid grid-cols-3 gap-4 mb-6">
-                            <div class="symbol-card glass-card p-4 rounded-lg text-center">
-                                <div class="text-4xl mb-2">🍎</div>
-                                <h4 class="font-bold">Gaslighting</h4>
-                                <p class="text-sm text-textSecondary mt-1">
-                                    "Something feels wrong"
-                                </p>
-                            </div>
-                            
-                            <div class="symbol-card glass-card p-4 rounded-lg text-center">
-                                <div class="text-4xl mb-2">🌙</div>
-                                <h4 class="font-bold">Urgent Shelter</h4>
-                                <p class="text-sm text-textSecondary mt-1">
-                                    "Need safe place now"
-                                </p>
-                            </div>
-                            
-                            <div class="symbol-card glass-card p-4 rounded-lg text-center">
-                                <div class="text-4xl mb-2">📚</div>
-                                <h4 class="font-bold">Document Help</h4>
-                                <p class="text-sm text-textSecondary mt-1">
-                                    "Preserve evidence"
-                                </p>
-                            </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">D</div>
+                        <div class="author-info">
+                            <h4>David R.</h4>
+                            <p>Survivor, 29</p>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Step 3 -->
-                <div class="flex flex-col md:flex-row items-center">
-                    <div class="flex-shrink-0 mb-6 md:mb-0 md:mr-8">
-                        <div class="text-4xl bg-cardBg w-16 h-16 rounded-full flex items-center justify-center border-2 border-accent">3</div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "As a counselor, I've seen how Silent Signals gives clients a lifeline they can use right under an abuser's nose. It's revolutionary."
                     </div>
-                    <div>
-                        <h3 class="text-xl md:text-2xl font-bold mb-3">Document & Preserve Evidence</h3>
-                        <p class="text-textSecondary mb-4">
-                            Use our Voice Mask technology to record dangerous situations while 
-                            maintaining plausible deniability. Evidence is securely stored with 
-                            innocent file names.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Safety Pack Section -->
-    <section id="safety-pack" class="py-16 md:py-24 px-4 md:px-8">
-        <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Get Your <span class="text-accent">Safety Pack</span></h2>
-                <p class="text-textSecondary max-w-2xl mx-auto">Free, discreet resources to help you stay safe</p>
-            </div>
-            
-            <div class="glass-card rounded-2xl p-6 md:p-8 overflow-hidden">
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div>
-                        <h3 class="text-xl md:text-2xl font-bold mb-4">What's Included</h3>
-                        <ul class="space-y-4">
-                            <li class="flex items-start">
-                                <div class="bg-accent rounded-full w-8 h-8 flex items-center justify-center mr-3">
-                                    <i class="fas fa-file-pdf text-white"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold">Symbol Guide PDF</h4>
-                                    <p class="text-sm text-textSecondary">Meanings and usage instructions</p>
-                                </div>
-                            </li>
-                            <li class="flex items-start">
-                                <div class="bg-accent rounded-full w-8 h-8 flex items-center justify-center mr-3">
-                                    <i class="fas fa-print text-white"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold">Printable Cheat Sheet</h4>
-                                    <p class="text-sm text-textSecondary">Disguised as a grocery list</p>
-                                </div>
-                            </li>
-                            <li class="flex items-start">
-                                <div class="bg-accent rounded-full w-8 h-8 flex items-center justify-center mr-3">
-                                    <i class="fas fa-users text-white"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold">Ally Training Guide</h4>
-                                    <p class="text-sm text-textSecondary">For your trusted contacts</p>
-                                </div>
-                            </li>
-                            <li class="flex items-start">
-                                <div class="bg-accent rounded-full w-8 h-8 flex items-center justify-center mr-3">
-                                    <i class="fas fa-comments text-white"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold">Emergency Template</h4>
-                                    <p class="text-sm text-textSecondary">Pre-formatted message</p>
-                                </div>
-                            </li>
-                        </ul>
-                        
-                        <div class="mt-8 bg-purple-900/30 p-4 rounded-lg border border-purple-800/50">
-                            <h4 class="font-bold text-accent mb-2">Safety First:</h4>
-                            <p class="text-sm">
-                                All resources are designed to look completely normal. File names are disguised
-                                as everyday documents to protect your safety.
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <div class="glass-card p-6 rounded-xl">
-                            <h3 class="text-xl font-bold mb-4">Get Your Pack</h3>
-                            <p class="text-textSecondary mb-4">
-                                Enter your safest email to receive the download instructions:
-                            </p>
-                            
-                            <form id="safety-pack-form" class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium mb-1">Your safest email:</label>
-                                    <input 
-                                        type="email" 
-                                        required
-                                        class="w-full px-4 py-3 bg-cardBg border border-cardBorder rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
-                                        placeholder="name@example.com"
-                                    >
-                                </div>
-                                <button 
-                                    type="submit"
-                                    class="w-full bg-accent hover:bg-purple-700 py-3 rounded-lg font-medium transition flex items-center justify-center"
-                                >
-                                    <i class="fas fa-paper-plane mr-2"></i> Send My Safety Pack
-                                </button>
-                            </form>
-                            
-                            <div class="mt-6 text-sm text-textSecondary bg-cardBg p-4 rounded-lg">
-                                <div class="font-bold mb-2">How we protect you:</div>
-                                <ul class="space-y-1">
-                                    <li class="flex items-start">
-                                        <i class="fas fa-shield-alt text-accent mr-2 mt-1"></i>
-                                        <span>Email subject: <span class="font-mono">"Your Grocery List Reminder"</span></span>
-                                    </li>
-                                    <li class="flex items-start">
-                                        <i class="fas fa-lock text-accent mr-2 mt-1"></i>
-                                        <span>Files password: <span class="font-mono">FreshApples2023</span></span>
-                                    </li>
-                                    <li class="flex items-start">
-                                        <i class="fas fa-user-secret text-accent mr-2 mt-1"></i>
-                                        <span>No personal information stored</span>
-                                    </li>
-                                </ul>
-                            </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">S</div>
+                        <div class="author-info">
+                            <h4>Dr. Sarah J.</h4>
+                            <p>Trauma Therapist</p>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Download Panel (Initially Hidden) -->
-                <div class="download-panel mt-8 rounded-xl overflow-hidden" id="download-panel">
-                    <div class="p-6 md:p-8 bg-gradient-to-r from-purple-900/30 to-indigo-900/30">
-                        <h3 class="text-xl md:text-2xl font-bold mb-2">Your Safety Pack is Ready!</h3>
-                        <p class="text-textSecondary mb-6">We've sent instructions to your email. For immediate access:</p>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                            <a href="#" class="glass-card p-4 rounded-lg flex items-center group hover:border-accent transition">
-                                <div class="text-3xl mr-4">📄</div>
-                                <div>
-                                    <div class="font-bold group-hover:text-accent">Symbol Guide (PDF)</div>
-                                    <div class="text-sm text-textSecondary">Password: FreshApples2023</div>
-                                </div>
-                            </a>
-                            
-                            <a href="#" class="glass-card p-4 rounded-lg flex items-center group hover:border-accent transition">
-                                <div class="text-3xl mr-4">🖼️</div>
-                                <div>
-                                    <div class="font-bold group-hover:text-accent">Symbol Images (ZIP)</div>
-                                    <div class="text-sm text-textSecondary">1.2 MB • 12 files</div>
-                                </div>
-                            </a>
-                            
-                            <a href="#" class="glass-card p-4 rounded-lg flex items-center group hover:border-accent transition">
-                                <div class="text-3xl mr-4">📋</div>
-                                <div>
-                                    <div class="font-bold group-hover:text-accent">Printable Cheat Sheet</div>
-                                    <div class="text-sm text-textSecondary">Disguised as grocery list</div>
-                                </div>
-                            </a>
-                            
-                            <a href="#" class="glass-card p-4 rounded-lg flex items-center group hover:border-accent transition">
-                                <div class="text-3xl mr-4">👥</div>
-                                <div>
-                                    <div class="font-bold group-hover:text-accent">Ally Training Guide</div>
-                                    <div class="text-sm text-textSecondary">For your trusted contacts</div>
-                                </div>
-                            </a>
-                        </div>
-                        
-                        <div class="bg-yellow-900/30 p-4 rounded-lg border border-yellow-800/50">
-                            <h4 class="font-bold text-yellow-400 mb-2">Safety Instructions:</h4>
-                            <ul class="space-y-2 text-sm">
-                                <li class="flex items-start">
-                                    <i class="fas fa-check-circle text-yellow-400 mr-2 mt-1"></i>
-                                    <span>Save files with innocent names like "GroceryList.pdf"</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fas fa-check-circle text-yellow-400 mr-2 mt-1"></i>
-                                    <span>Delete download email after saving files</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fas fa-check-circle text-yellow-400 mr-2 mt-1"></i>
-                                    <span>Print cheat sheet and keep in wallet</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fas fa-check-circle text-yellow-400 mr-2 mt-1"></i>
-                                    <span>Share Ally Guide only with trusted contacts</span>
-                                </li>
-                            </ul>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "The Adiuvo alert system helped me avoid a dangerous area near my workplace. I didn't know the people who sent signals, but their warnings protected me."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">A</div>
+                        <div class="author-info">
+                            <h4>Alex K.</h4>
+                            <p>Survivor, 26</p>
                         </div>
                     </div>
                 </div>
@@ -519,116 +652,100 @@
         </div>
     </section>
 
-    <!-- How Allies Help -->
-    <section class="py-16 md:py-24 px-4 md:px-8 bg-cardBg">
-        <div class="max-w-4xl mx-auto">
-            <div class="glass-card rounded-2xl p-6 md:p-8">
-                <h2 class="text-2xl md:text-3xl font-bold mb-6 text-center">How <span class="text-accent">Trusted Allies</span> Can Help</h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                        <h3 class="text-xl font-bold mb-4 flex items-center">
-                            <i class="fas fa-user-circle text-accent mr-2"></i> For Survivors:
-                        </h3>
-                        <ol class="list-decimal list-inside space-y-3 pl-2">
-                            <li>Identify 2-3 absolutely trusted allies</li>
-                            <li>Share the Ally Guide with them securely</li>
-                            <li>Establish response protocols:
-                                <ul class="list-disc list-inside ml-6 mt-1 space-y-1 text-textSecondary">
-                                    <li>"If I send 🍎, call me at 3pm with grocery questions"</li>
-                                    <li>"If I send 🌙, text me a fake work emergency"</li>
-                                </ul>
-                            </li>
-                            <li>Practice using symbols in safe scenarios</li>
-                        </ol>
-                    </div>
-                    
-                    <div>
-                        <h3 class="text-xl font-bold mb-4 flex items-center">
-                            <i class="fas fa-hands-helping text-accent mr-2"></i> For Allies:
-                        </h3>
-                        <ul class="space-y-3">
-                            <li class="flex items-start">
-                                <i class="fas fa-brain text-accent mr-2 mt-1"></i>
-                                <span>Memorize symbol meanings - never write them down</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-comments text-accent mr-2 mt-1"></i>
-                                <span>Respond naturally - don't acknowledge the signal</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-tasks text-accent mr-2 mt-1"></i>
-                                <span>Follow pre-arranged protocols exactly</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-lock text-accent mr-2 mt-1"></i>
-                                <span>Never discuss Silent Signals over unsecured channels</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Start Protecting Yourself Today</h2>
+            <p>Join thousands who've reclaimed their voice without risking their safety</p>
+            <button class="cta-button">Get Safety Pack - Free Forever</button>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="py-12 px-4 md:px-8 border-t border-cardBorder">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-8 md:mb-0 text-center md:text-left">
-                    <div class="text-2xl font-bold mb-2">Silent<span class="text-accent">Signals</span></div>
-                    <p class="text-textSecondary max-w-xs">
-                        Tools for survivors, by survivors. Reclaim your voice.
-                    </p>
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-logo">Silent<span>Signals</span></div>
+                    <p class="footer-description">Tools for survivors, by survivors. Reclaim your voice without risking your safety.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">𝕏</a>
+                        <a href="#" class="social-link">in</a>
+                        <a href="#" class="social-link">f</a>
+                        <a href="#" class="social-link">ig</a>
+                    </div>
                 </div>
-                <div class="flex space-x-6">
-                    <a href="#" class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-accent/20 transition">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="#" class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-accent/20 transition">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="#" class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-accent/20 transition">
-                        <i class="fab fa-github"></i>
-                    </a>
+                <div>
+                    <h3 class="footer-heading">Product</h3>
+                    <div class="footer-links">
+                        <a href="#">Features</a>
+                        <a href="#">How It Works</a>
+                        <a href="#">Safety Pack</a>
+                        <a href="#">Pricing</a>
+                        <a href="#">Download</a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Resources</h3>
+                    <div class="footer-links">
+                        <a href="#">Safety Guides</a>
+                        <a href="#">Support Network</a>
+                        <a href="#">Emergency Contacts</a>
+                        <a href="#">Blog</a>
+                        <a href="#">Help Center</a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Company</h3>
+                    <div class="footer-links">
+                        <a href="#">About Us</a>
+                        <a href="#">Our Mission</a>
+                        <a href="#">Careers</a>
+                        <a href="#">Contact</a>
+                        <a href="#">Press</a>
+                    </div>
                 </div>
             </div>
-            <div class="border-t border-cardBorder mt-12 pt-8 text-center text-textSecondary">
-                <p>Built with ❤️ by survivors for survivors | 100% anonymous and secure</p>
-                <p class="mt-2 text-sm">Always clear browser history after visiting this site</p>
+            <div class="copyright">
+                &copy; 2023 Silent Signals. All rights reserved. | Privacy Policy | Terms of Service
             </div>
         </div>
     </footer>
 
     <script>
-        // Safety pack form functionality
-        const safetyPackForm = document.getElementById('safety-pack-form');
-        const downloadPanel = document.getElementById('download-panel');
-        
-        safetyPackForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+        // Simple animation for features on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const featureCards = document.querySelectorAll('.feature-card');
             
-            const submitButton = safetyPackForm.querySelector('button[type="submit"]');
-            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Sending securely...';
-            submitButton.disabled = true;
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
             
-            // Simulate secure request process
-            setTimeout(function() {
-                // Show download panel
-                downloadPanel.classList.add('open');
-                
-                // Reset button
-                submitButton.innerHTML = '<i class="fas fa-check mr-2"></i> Pack Sent Successfully';
-                
-                // Create confirmation message
-                const confirmation = document.createElement('div');
-                confirmation.className = 'text-center mt-4 text-green-400';
-                confirmation.innerHTML = 'Check your email for "Your Grocery List Reminder"';
-                safetyPackForm.appendChild(confirmation);
-                
-                // Scroll to download panel
-                downloadPanel.scrollIntoView({ behavior: 'smooth' });
-            }, 2000);
+            featureCards.forEach(card => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+            
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('nav a').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                });
+            });
         });
     </script>
 </body>
